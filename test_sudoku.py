@@ -137,3 +137,72 @@ def test_has_unique_solution():
     ]
     board = SudokuBoard(one_empty_puzzle)
     assert board.has_unique_solution() is True, "Puzzle with one empty cell should have unique solution"
+
+
+def test_score_difficulty():
+    """Test that score_difficulty correctly classifies puzzles as Easy, Medium, or Hard"""
+    
+    # Test case 1: Easy puzzle (30 empty cells)
+    easy_puzzle = [
+        [5, 3, 4, 6, 7, 8, 9, 1, 2],
+        [6, 7, 2, 1, 9, 5, 3, 4, 8],
+        [1, 9, 8, 3, 4, 2, 5, 6, 7],
+        [8, 5, 9, 7, 6, 1, 0, 0, 0],
+        [4, 2, 6, 8, 5, 3, 0, 0, 0],
+        [7, 1, 3, 9, 2, 4, 0, 0, 0],
+        [9, 6, 0, 0, 0, 0, 0, 0, 0],
+        [2, 8, 0, 0, 0, 0, 0, 0, 0],
+        [3, 4, 0, 0, 0, 0, 0, 0, 0]
+    ]
+    board = SudokuBoard(easy_puzzle)
+    difficulty = board.score_difficulty()
+    assert difficulty == "Easy", f"Expected 'Easy' but got '{difficulty}'"
+    
+    # Test case 2: Medium puzzle (45 empty cells)
+    medium_puzzle = [
+        [5, 3, 4, 6, 7, 8, 9, 1, 2],
+        [6, 7, 2, 1, 9, 5, 3, 4, 8],
+        [1, 9, 8, 3, 4, 2, 5, 6, 7],
+        [8, 5, 9, 0, 0, 0, 0, 0, 0],
+        [4, 2, 6, 0, 0, 0, 0, 0, 0],
+        [7, 1, 3, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0]
+    ]
+    board = SudokuBoard(medium_puzzle)
+    difficulty = board.score_difficulty()
+    assert difficulty == "Medium", f"Expected 'Medium' but got '{difficulty}'"
+    
+    # Test case 3: Hard puzzle (54 empty cells)
+    hard_puzzle = [
+        [5, 3, 4, 6, 7, 8, 9, 1, 2],
+        [6, 7, 2, 1, 9, 5, 3, 4, 8],
+        [1, 9, 8, 3, 4, 2, 5, 6, 7],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0]
+    ]
+    board = SudokuBoard(hard_puzzle)
+    difficulty = board.score_difficulty()
+    assert difficulty == "Hard", f"Expected 'Hard' but got '{difficulty}'"
+    
+    # Test case 4: Very easy puzzle (less than 30 empty cells)
+    # This puzzle has 3 empty cells
+    very_easy_puzzle = [
+        [5, 3, 4, 6, 7, 8, 9, 1, 2],
+        [6, 7, 2, 1, 9, 5, 3, 4, 8],
+        [1, 9, 8, 3, 4, 2, 5, 6, 7],
+        [8, 5, 9, 7, 6, 1, 4, 2, 3],
+        [4, 2, 6, 8, 5, 3, 7, 9, 1],
+        [7, 1, 3, 9, 2, 4, 8, 5, 6],
+        [9, 6, 1, 5, 3, 7, 2, 8, 0],
+        [2, 8, 7, 4, 1, 9, 6, 0, 5],
+        [3, 4, 5, 2, 8, 6, 0, 7, 9]
+    ]
+    board = SudokuBoard(very_easy_puzzle)
+    difficulty = board.score_difficulty()
+    assert difficulty == "Easy", f"Expected 'Easy' but got '{difficulty}'"

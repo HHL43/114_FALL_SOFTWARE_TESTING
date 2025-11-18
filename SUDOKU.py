@@ -54,6 +54,28 @@ class SudokuBoard:
                     return True
                 self.grid[row][col] = 0  # Backtrack
         return False
+    
+    def count_solve_steps(self):
+        """Count the number of recursive calls needed to solve the puzzle."""
+        steps = [0]  # Use list to make it mutable in nested function
+        
+        def solve_with_count():
+            steps[0] += 1
+            find = self.find_empty()
+            if not find:
+                return True
+            
+            row, col = find
+            for num in range(1, self.size + 1):
+                if self.is_valid(row, col, num):
+                    self.grid[row][col] = num
+                    if solve_with_count():
+                        return True
+                    self.grid[row][col] = 0  # Backtrack
+            return False
+        
+        solve_with_count()
+        return steps[0]
 
     def has_unique_solution(self):
         """
@@ -82,6 +104,42 @@ class SudokuBoard:
 
         count_solutions()
         return solution_count == 1
+
+    def score_difficulty(self):
+        """
+        Score the difficulty of a Sudoku puzzle based on empty cells and solving complexity.
+        Returns 'Easy', 'Medium', or 'Hard'.
+        
+        Algorithm:
+        1. Count empty cells (primary factor)
+        2. Measure solving steps (secondary factor for complexity)
+        3. Calculate weighted difficulty score
+        
+        Difficulty classification:
+        - Easy: Score ≤ 40
+        - Medium: Score 41-60
+        - Hard: Score > 60
+        """
+        import copy
+        
+        # Count empty cells
+        empty_cells = sum(row.count(0) for row in self.grid)
+        
+        # Create a copy to measure solving complexity
+        test_board = SudokuBoard(copy.deepcopy(self.grid))
+        solving_steps = test_board.count_solve_steps()
+        
+        # Calculate weighted difficulty score
+        # Empty cells contribute 70%, solving complexity contributes 30%
+        difficulty_score = (empty_cells * 0.7) + (solving_steps * 0.3)
+        
+        # Classify based on score
+        if difficulty_score <= 40:
+            return "Easy"
+        elif difficulty_score <= 60:
+            return "Medium"
+        else:
+            return "Hard"
 
 
 def generate(difficulty):
